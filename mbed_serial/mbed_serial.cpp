@@ -1,29 +1,31 @@
-/*-------------------------------------------------*/
-/* Turnof the power supplyinjection 
-/*  1. Servo
-/*  2. mbed
-/*-------------------------------------------------*/
+/*--------------------------------------------------*/
+/* @Program name ; mbed_servo                       */
+/* @Author : Kohei Izumi                            */
+/* @Comment : Servo motor operation                 */
+/*                                                  */
+/* Copyright(c) 2014 Kohei Izumi                    */
+/*--------------------------------------------------*/
 
 #include "mbed.h"
 Serial device(p9, p10);         // tx = P9, rx = P10
 DigitalOut REDE(p11);           // RS485 Transmit Enable
-/*-------------------------------------------------*/
-/* Funcyion     : mbed initialize                  */
-/* NAME         : init                             */
-/* Argument     : ---                              */
-/* Return value : ---                              */
-/*-------------------------------------------------*/
+/*--------------------------------------------------*/
+/* Funcyion     : mbed initialize                   */
+/* NAME         : init                              */
+/* Argument     : ---                               */
+/* Return value : ---                               */
+/*--------------------------------------------------*/
 void init(void){
     device.baud(115200);        // baud Rate = 115.2kbps [Futaba default]
     REDE = 0;                   // RS485 Transmit disable
 }
-/*-------------------------------------------------*/
-/* Funcyion     : servo torque enable              */
-/* NAME         : torque                           */
-/* Argument     : ID (Servo ID)                    */
-/*              : data (Torque enable)             */
-/* Return value : ---                              */
-/*-------------------------------------------------*/
+/*--------------------------------------------------*/
+/* Funcyion     : servo torque enable               */
+/* NAME         : torque                            */
+/* Argument     : ID (Servo ID)                     */
+/*              : data (Torque enable)              */
+/* Return value : ---                               */
+/*--------------------------------------------------*/
 void torque (unsigned char ID, unsigned char data){
 
     unsigned char TxData[9];    // TransmitByteData [9byte]
@@ -53,13 +55,13 @@ void torque (unsigned char ID, unsigned char data){
     wait_us(250);               // Wait for transmission
     REDE = 0;                   // RS485 Transmitt disable
 }
-/*-------------------------------------------------*/
-/* Funcyion     : servo goal position instruction  */
-/* NAME         : GoalPosition                     */
-/* Argument     : ID (Servo ID)                    */
-/*              : data (Goal Position)             */
-/* Return value : ---                              */
-/*-------------------------------------------------*/
+/*--------------------------------------------------*/
+/* Function     : servo goal position instruction   */
+/* NAME         : GoalPosition                      */
+/* Argument     : ID (Servo ID)                     */
+/*              : data (Goal Position)              */
+/* Return value : ---                               */
+/*--------------------------------------------------*/
 void GoalPosition (unsigned char ID, int data){
 
     unsigned char TxData[10];   // TransmitByteData [10byte]
@@ -89,12 +91,12 @@ void GoalPosition (unsigned char ID, int data){
     wait_us(250);               // Wait for transmission
     REDE = 0;                   // RS485 Transmit disable
 }
-/*-------------------------------------------------*/
-/* Funcyion     : main program                     */ 
-/* NAME         : main                             */
-/* Argument     : ---                              */
-/* Return value : ---                              */
-/*-------------------------------------------------*/
+/*--------------------------------------------------*/
+/* Function     : main program                      */ 
+/* NAME         : main                              */
+/* Argument     : ---                               */
+/* Return value : ---                               */
+/*--------------------------------------------------*/
 int main() {
     init();                     // initialize
     torque(0x01, 0x01);         // ID = 1(0x01) , torque = OFF (0x00)
