@@ -28,7 +28,7 @@ void Init(void){
 /*--------------------------------------------------*/
 void Torque (unsigned char ID, unsigned char data){
 
-    unsigned char TxData[9];    // TransmitByteData [9byte]
+    unsigned char TxData[10];    // TransmitByteData [10byte]
     unsigned char CheckSum = 0; // CheckSum calculation
     
     TxData[0] = 0xFA;           // Header
@@ -41,15 +41,16 @@ void Torque (unsigned char ID, unsigned char data){
     TxData[7] = data;           // Data
     
     // CheckSum calculation
-    for(int i=2; i<=7; i++){
-        CheckSum = CheckSum ^ TxData[i];                // XOR from ID to Data
+    CheckSum = TxData[2];
+    for(int i=3; i<8; i++){
+        CheckSum = CheckSum ^ TxData[i];
     }
     
     TxData[8] = CheckSum;       // Sum
     
     // Send Packet 
     REDE = 1;                   // RS485 Transmit Enable
-    for(int i=0; i<=8; i++){
+    for(int i=0; i<9; i++){
         device.putc(TxData[i]);
     }
     wait_us(250);               // Wait for transmission
@@ -65,7 +66,7 @@ void Torque (unsigned char ID, unsigned char data){
 /*--------------------------------------------------*/
 void SetPosition (unsigned char ID, short data){
 
-    unsigned char TxData[10];   // TransmitByteData [10byte]
+    unsigned char TxData[15];   // TransmitByteData [15byte]
     unsigned char CheckSum = 0; // CheckSum calculation
     
     TxData[0] = 0xFA;           // Header
@@ -80,13 +81,14 @@ void SetPosition (unsigned char ID, short data){
     TxData[8] = (unsigned char)0x00FF & (data >> 8);    // Hi  byte
     
     // CheckSum calculation
-    for(int i=3; i<=8; i++){
-        CheckSum = CheckSum ^ TxData[i];                // XOR from ID to Data
+    CheckSum = TxData[2];
+    for(int i=3; i<9; i++){
+        CheckSum = CheckSum ^ TxData[i];
     }
     TxData[9] = CheckSum;       // Sum
     // Send Packet
     REDE = 1;                   // RS485 Transmitt Enable
-    for(int i=0; i<=9; i++){
+    for(int i=0; i<10; i++){
         device.putc(TxData[i]);
     }
     wait_us(250);               // Wait for transmission
@@ -102,7 +104,7 @@ void SetPosition (unsigned char ID, short data){
 /* Return value : ---                               */
 /*--------------------------------------------------*/
 void SetTimeAndPosition(unsigned char ID, short data, unsigned short stime){
-    unsigned char TxData[12];   // TransmitByteData [10byte]
+    unsigned char TxData[15];   // TransmitByteData [15byte]
     unsigned char CheckSum = 0; // CheckSum calculation
 	
     TxData[0] = 0xFA;           // Header
@@ -119,14 +121,15 @@ void SetTimeAndPosition(unsigned char ID, short data, unsigned short stime){
     TxData[10] = (unsigned char)0x00FF * (stime >> 8);   // Hi  byte
     
     // CheckSum calculation
-    for (int i=3; i<=10; i++) {
+    CheckSum = TxData[2];
+    for (int i=3; i<11; i++) {
         CheckSum = CheckSum ^ TxData[i];
     }
     TxData[11] = CheckSum;      // Sum
 
     // Send Packet
     REDE = 1;                   // Transmit Enable
-    for(int i=0; i<=11; i++){
+    for(int i=0; i<12; i++){
         device.putc(data[i]);
     }
     wait_us(250);               // Wait for transmission
