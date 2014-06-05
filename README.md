@@ -3,4 +3,4 @@ mbed-servo
 
 mbedでfutaba製サーボを動作させるプログラムです
 
-### 動作は未確認です！（多分動くと思うけど）
+参考にしたのは[sample](http://www.futaba.co.jp/robot/download/sample_programs)
