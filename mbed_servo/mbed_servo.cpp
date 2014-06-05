@@ -7,7 +7,7 @@
 /*--------------------------------------------------*/
 
 #include "mbed.h"
-Serial device(p9, p10);         // tx = P9, rx = P10
+Serial device(p13, p14);         // tx = P9, rx = P10
 DigitalOut REDE(p11);           // RS485 Transmit Enable
 /*--------------------------------------------------*/
 /* Function     : mbed initialize                   */
