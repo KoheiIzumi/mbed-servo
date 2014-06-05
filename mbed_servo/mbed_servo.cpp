@@ -106,7 +106,7 @@ void SetPosition (unsigned char ID, short data){
 void SetTimeAndPosition(unsigned char ID, short data, unsigned short stime){
     unsigned char TxData[15];   // TransmitByteData [15byte]
     unsigned char CheckSum = 0; // CheckSum calculation
-	
+    
     TxData[0] = 0xFA;           // Header
     TxData[1] = 0xAF;           // Header
     TxData[2] = ID;             // ID
@@ -130,7 +130,7 @@ void SetTimeAndPosition(unsigned char ID, short data, unsigned short stime){
     // Send Packet
     REDE = 1;                   // Transmit Enable
     for(int i=0; i<12; i++){
-        device.putc(data[i]);
+        device.putc(TxData[i]);
     }
     wait_us(250);               // Wait for transmission
     REDE = 0;                   // Transmitt disable
@@ -144,18 +144,13 @@ void SetTimeAndPosition(unsigned char ID, short data, unsigned short stime){
 /*--------------------------------------------------*/
 int main() {
     Init();                     // initialize
-    Torque(0x01, 0x01);         // ID = 1(0x01) , torque = OFF (0x00)
+    Torque(1, 1);         // ID = 1(0x01) , torque = OFF (0x00)
+    Torque(2, 1);
                                 // torque = OFF(0x00), ON(0x01), BRAKE(0x02)
     wait(1);                    // wait (1sec)
     while(1){
-        SetPosition(0x01,300); // ID = 1(0x01) , GoalPosition = 30.0deg(300)
-        wait(1);                // wait (1sec)
-        SetPosition(0x01,-300);// ID = 1(0x01) , GoalPosition = -30.0deg(-300) 
-        wait(1);                // wait (1sec)
-
-        SetTimeAndPosition(0x01, 500, 35);
-	wait(1);
-	SetTimeAndPosition(0x01, -500, 35);
-	wait(1);
+        SetTimeAndPosition(1, 0, 1);
+        SetTimeAndPosition(2, 0, 1);
+        wait(1);
     }
 }
