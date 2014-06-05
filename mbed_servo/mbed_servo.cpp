@@ -10,7 +10,7 @@
 Serial device(p9, p10);         // tx = P9, rx = P10
 DigitalOut REDE(p11);           // RS485 Transmit Enable
 /*--------------------------------------------------*/
-/* Funcyion     : mbed initialize                   */
+/* Function     : mbed initialize                   */
 /* NAME         : Init                              */
 /* Argument     : ---                               */
 /* Return value : ---                               */
@@ -20,7 +20,7 @@ void Init(void){
     REDE = 0;                   // RS485 Transmit disable
 }
 /*--------------------------------------------------*/
-/* Funcyion     : Servo torque enable               */
+/* Function     : Servo torque enable               */
 /* NAME         : Torque                            */
 /* Argument     : ID (Servo ID)                     */
 /*              : data (Torque enable)              */
