@@ -118,7 +118,7 @@ void SetTimeAndPosition(unsigned char ID, short data, unsigned short stime){
     TxData[7] = (unsigned char)0x00FF & data;           // Low byte
     TxData[8] = (unsigned char)0x00FF & (data >> 8);    // Hi  byte
     TxData[9] = (unsigned char)0x00FF & stime;           // Low byte
-    TxData[10] = (unsigned char)0x00FF * (stime >> 8);   // Hi  byte
+    TxData[10] = (unsigned char)0x00FF & (stime >> 8);   // Hi  byte
     
     // CheckSum calculation
     CheckSum = TxData[2];
