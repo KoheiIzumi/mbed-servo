@@ -7,10 +7,10 @@
 /*--------------------------------------------------*/
 
 #include "mbed.h"
-Serial device(p13, p14);         // tx = P9, rx = P10
+Serial device(p9, p10);         // tx = P9, rx = P10
 DigitalOut REDE(p11);           // RS485 Transmit Enable
 /*--------------------------------------------------*/
-/* Function     : mbed initialize                   */
+/* Funcyion     : mbed initialize                   */
 /* NAME         : Init                              */
 /* Argument     : ---                               */
 /* Return value : ---                               */
@@ -20,7 +20,7 @@ void Init(void){
     REDE = 0;                   // RS485 Transmit disable
 }
 /*--------------------------------------------------*/
-/* Function     : Servo torque enable               */
+/* Funcyion     : Servo torque enable               */
 /* NAME         : Torque                            */
 /* Argument     : ID (Servo ID)                     */
 /*              : data (Torque enable)              */
@@ -106,7 +106,7 @@ void SetPosition (unsigned char ID, short data){
 void SetTimeAndPosition(unsigned char ID, short data, unsigned short stime){
     unsigned char TxData[15];   // TransmitByteData [15byte]
     unsigned char CheckSum = 0; // CheckSum calculation
-    
+	
     TxData[0] = 0xFA;           // Header
     TxData[1] = 0xAF;           // Header
     TxData[2] = ID;             // ID
@@ -116,9 +116,9 @@ void SetTimeAndPosition(unsigned char ID, short data, unsigned short stime){
     TxData[6] = 0x01;           // Count
                                 // Data
     TxData[7] = (unsigned char)0x00FF & data;           // Low byte
-    TxData[8] = (unsigned char)0x00FF & (data >> 8);    // Hi  byte
+    TxData[8] = (unsigned char)0xFF00 & (data >> 8);    // Hi  byte
     TxData[9] = (unsigned char)0x00FF & stime;           // Low byte
-    TxData[10] = (unsigned char)0x00FF & (stime >> 8);   // Hi  byte
+    TxData[10] = (unsigned char)0xFF00 & (stime >> 8);   // Hi  byte
     
     // CheckSum calculation
     CheckSum = TxData[2];
@@ -144,13 +144,13 @@ void SetTimeAndPosition(unsigned char ID, short data, unsigned short stime){
 /*--------------------------------------------------*/
 int main() {
     Init();                     // initialize
-    Torque(1, 1);         // ID = 1(0x01) , torque = OFF (0x00)
-    Torque(2, 1);
+    Torque(0x01, 0x01);         // ID = 1(0x01) , torque = OFF (0x00)
                                 // torque = OFF(0x00), ON(0x01), BRAKE(0x02)
     wait(1);                    // wait (1sec)
     while(1){
-        SetTimeAndPosition(1, 0, 1);
-        SetTimeAndPosition(2, 0, 1);
-        wait(1);
+        SetPosition(0x01,300); // ID = 1(0x01) , GoalPosition = 30.0deg(300)
+        wait(1);                // wait (1sec)
+        SetPosition(0x01,-300);// ID = 1(0x01) , GoalPosition = -30.0deg(-300) 
+        wait(1);                // wait (1sec)
     }
 }
